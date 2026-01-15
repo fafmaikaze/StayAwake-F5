@@ -58,26 +58,26 @@ namespace pwCopy
             if (_targetWindowName != value)
             {
                 _targetWindowName = value;
-                cachedHwnd = IntPtr.Zero; // ¦WºÙ§ïÅÜ®É­«¸m§Ö¨ú
+                cachedHwnd = IntPtr.Zero; // åç¨±æ”¹è®Šæ™‚é‡ç½®å¿«å–
                 if (textBox1 != null && textBox1.Text != value)
                 {
                     textBox1.Text = value;
                 }
-            }
+            } 
         }
 
         public Form1()
         {
             InitializeComponent();
-            // ªì©l¤ÆTimer
+            // åˆå§‹åŒ–Timer
             keyTimer = new System.Windows.Forms.Timer();
-            keyTimer.Interval = 1000 * 60 * 10; // ¨C5¤ÀÄÁµo°e¤@¦¸¡A¥i¦Û¦æ½Õ¾ã
-            //keyTimer.Interval = 1000 * 5; // ¨C5¬í¡A´ú¸Õ¥Î
+            keyTimer.Interval = 1000 * 60 * 10; // æ¯10åˆ†é˜ç™¼é€ä¸€æ¬¡ï¼Œå¯è‡ªè¡Œèª¿æ•´
+            //keyTimer.Interval = 1000 * 5; // æ¯5ç§’ï¼Œæ¸¬è©¦ç”¨
             keyTimer.Tick += KeyTimer_Tick;
         }
 
         private bool isButtonHelperActivate = false;
-        private System.Windows.Forms.Timer keyTimer; // TimerÅÜ¼Æ
+        private System.Windows.Forms.Timer keyTimer; // Timerè®Šæ•¸
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -104,22 +104,22 @@ namespace pwCopy
             isButtonHelperActivate = !isButtonHelperActivate;
             if (isButtonHelperActivate)
             {
-                button5.Text = "¦Û°ÊF5±Ò°Ê¤¤...";
-                keyTimer.Start(); // ¶}©lµo°eF5
-                KeyTimer_Tick(null!, null!); // ¥ß§YÄ²µo¤@¦¸
-                textBox1.Enabled = false; // Âê©w¥Ø¼Ğµøµ¡¿é¤J®Ø
+                button5.Text = "è‡ªå‹•F5å•Ÿå‹•ä¸­...";
+                keyTimer.Start(); // é–‹å§‹ç™¼é€F5
+                KeyTimer_Tick(null!, null!); // ç«‹å³è§¸ç™¼ä¸€æ¬¡
+                textBox1.Enabled = false;
             }
             else
             {
-                button5.Text = "¦Û°ÊF5";
-                keyTimer.Stop(); // °±¤îµo°eF5
-                textBox1.Enabled = true; // ¸ÑÂê¥Ø¼Ğµøµ¡¿é¤J®Ø
+                button5.Text = "è‡ªå‹•F5";
+                keyTimer.Stop(); // åœæ­¢ç™¼é€F5
+                textBox1.Enabled = true;
             }
         }
 
         private void KeyTimer_Tick_OLD(object sender, EventArgs e)
         {
-            SendKeys.Send("{F5}"); // µo°eF5
+            SendKeys.Send("{F5}"); // ç™¼é€F5
         }
 
         private class WindowOption
@@ -151,7 +151,7 @@ namespace pwCopy
                 _ = GetWindowText(hWnd, builder, length + 1);
                 string title = builder.ToString();
 
-                // ¨ú±o Process Name
+                // å–å¾— Process Name
                 _ = GetWindowThreadProcessId(hWnd, out uint pid);
                 string processName = "Unknown";
                 try
@@ -186,7 +186,7 @@ namespace pwCopy
                 Width = 800,
                 Height = 150,
                 FormBorderStyle = FormBorderStyle.FixedDialog,
-                Text = "½Ğ¿ï¾Ü¥Ø¼Ğµøµ¡",
+                Text = "è«‹é¸æ“‡ç›®æ¨™è¦–çª—",
                 StartPosition = FormStartPosition.CenterScreen,
                 TopMost = true
             };
@@ -194,7 +194,7 @@ namespace pwCopy
             {
                 Left = 20,
                 Top = 10,
-                Text = "½Ğ¿ï¾Ü­nµo°e F5 ªºµøµ¡ (®æ¦¡: [Handle][µ{§Ç] ¼ĞÃD):",
+                Text = "è«‹é¸æ“‡è¦ç™¼é€ F5 çš„è¦–çª— (æ ¼å¼: [Handle][ç¨‹åº] æ¨™é¡Œ):",
                 AutoSize = true
             };
             var cmb = new ComboBox()
@@ -206,7 +206,7 @@ namespace pwCopy
             };
             var confirmation = new Button()
             {
-                Text = "½T©w",
+                Text = "ç¢ºå®š",
                 Left = 680,
                 Width = 80,
                 Top = 70,
@@ -234,47 +234,51 @@ namespace pwCopy
         {
             if (cachedHwnd == IntPtr.Zero)
             {
+                keyTimer.Stop(); // å½ˆå‡ºè¦–çª—æ™‚æš«åœ Timer
                 var selection = SelectTargetWindow();
-                if (selection is not null)
+                if (selection != null)
                 {
-                    // ª`·N¶¶§Ç¡G¥ı³]©w¦WºÙ (¦]¬° setter ·|²MªÅ cachedHwnd)¡A¦A³]©w Handle
+                    // æ³¨æ„é †åºï¼šå…ˆè¨­å®šåç¨± (å› ç‚º setter æœƒæ¸…ç©º cachedHwnd)ï¼Œå†è¨­å®š Handle
                     SetTargetWindowName(selection.ToString());
-                    cachedHwnd = selection.Hwnd; // ³o´N¬OÂê©wµøµ¡ªº "TAG" (Handle)
+                    cachedHwnd = selection.Hwnd; // é€™å°±æ˜¯é–å®šè¦–çª—çš„ "TAG" (Handle)
                 }
+                if (isButtonHelperActivate) keyTimer.Start(); // é—œé–‰è¦–çª—å¾Œæ¢å¾© Timer
             }
 
             if (cachedHwnd == IntPtr.Zero) return;
 
-            // ÀË¬d§Ö¨úªº Handle ¬O§_¦³®Ä
+            // æª¢æŸ¥å¿«å–çš„ Handle æ˜¯å¦æœ‰æ•ˆ
             if (!IsWindow(cachedHwnd))
             {
+                keyTimer.Stop(); // å½ˆå‡ºè¦–çª—æ™‚æš«åœ Timer
                 cachedHwnd = IntPtr.Zero;
-                SetTargetWindowName(""); // ²MªÅÅã¥Ü
-                MessageBox.Show("¥Ø¼Ğµøµ¡¤wÃö³¬©Î¥¢®Ä¡A½Ğ­«·s¿ï¾Ü¡C");
+                SetTargetWindowName(""); // æ¸…ç©ºé¡¯ç¤º
+                MessageBox.Show("ç›®æ¨™è¦–çª—å·²é—œé–‰æˆ–å¤±æ•ˆï¼Œè«‹é‡æ–°é¸æ“‡ã€‚");
 
-                // ­«·s¿ï¾Ü
+                // é‡æ–°é¸æ“‡
                 var selection = SelectTargetWindow();
                 if (selection is not null)
                 {
                     SetTargetWindowName(selection.ToString());
                     cachedHwnd = selection.Hwnd;
                 }
+                if (isButtonHelperActivate) keyTimer.Start(); // é—œé–‰è¦–çª—å¾Œæ¢å¾© Timer
             }
 
             if (cachedHwnd != IntPtr.Zero)
             {
-                // ¹Á¸Õ¼Ò¥é AutoHotkey ªº ControlSend
-                // AHK ªº±j¤j¤§³B¦b©ó¥¦·|´M§äµøµ¡¤ºªº¡u¤l±±¨î¶µ¡v(Child Control) ¨Óµo°e
-                // ¦Ó¤£¥u¬Oµo°eµ¹³Ì¥~¼hªºµøµ¡¡C
+                // å˜—è©¦æ¨¡ä»¿ AutoHotkey çš„ ControlSend
+                // AHK çš„å¼·å¤§ä¹‹è™•åœ¨æ–¼å®ƒæœƒå°‹æ‰¾è¦–çª—å…§çš„ã€Œå­æ§åˆ¶é …ã€(Child Control) ä¾†ç™¼é€
+                // è€Œä¸åªæ˜¯ç™¼é€çµ¦æœ€å¤–å±¤çš„è¦–çª—ã€‚
 
-                // 1. ¥ı¹ï¥Dµøµ¡µo°e (¥H¨¾¸U¤@)
+                // 1. å…ˆå°ä¸»è¦–çª—ç™¼é€ (ä»¥é˜²è¬ä¸€)
                 SendBackgroundF5(cachedHwnd);
 
-                // 2. ¹M¾ú©Ò¦³¤lµøµ¡¨Ãµo°e F5
+                // 2. éæ­·æ‰€æœ‰å­è¦–çª—ä¸¦ç™¼é€ F5
                 EnumChildWindows(cachedHwnd, delegate (IntPtr childHwnd, IntPtr lParam)
                 {
                     SendBackgroundF5(childHwnd);
-                    return true; // Ä~Äò¹M¾ú
+                    return true; // ç¹¼çºŒéæ­·
                 }, IntPtr.Zero);
             }
         }
@@ -283,8 +287,8 @@ namespace pwCopy
         {
             _targetWindowName = textBox1.Text;
 
-            // ·í TextBox ¤º®e§ïÅÜ®É¡A¹Á¸Õ¸ÑªR¨Ã§ó·s cachedHwnd
-            // ®æ¦¡¹w´Á¬°: [Handle][Process] Title
+            // ç•¶ TextBox å…§å®¹æ”¹è®Šæ™‚ï¼Œå˜—è©¦è§£æä¸¦æ›´æ–° cachedHwnd
+            // æ ¼å¼é æœŸç‚º: [Handle][Process] Title
             cachedHwnd = IntPtr.Zero;
             if (!string.IsNullOrEmpty(_targetWindowName) && _targetWindowName.StartsWith("["))
             {
